@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Card</title>
+
+<style>
+:root{
+    --primary:#ff6b9d;
+    --secondary:#ffd6e7;
+    --bg:#fff8fb;
+    --text:#333;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:var(--bg);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.envelope-container{
+    text-align:center;
+}
+
+.envelope{
+    width:250px;
+    height:170px;
+    background:var(--primary);
+    position:relative;
+    margin:auto;
+    cursor:pointer;
+    border-radius:0 0 10px 10px;
+    transition:transform .3s;
+}
+
+.envelope:hover{
+    transform:scale(1.05);
+}
+
+.flap{
+    position:absolute;
+    top:0;
+    left:0;
+    width:0;
+    height:0;
+    border-left:125px solid transparent;
+    border-right:125px solid transparent;
+    border-top:90px solid #ff4f87;
+    transform-origin:top;
+    transition:transform .8s;
+}
+
+.card{
+    position:fixed;
+    inset:0;
+    background:white;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card-content{
+    max-width:700px;
+    text-align:center;
+}
+
+h1{
+    color:var(--primary);
+    margin-bottom:20px;
+    font-size:3rem;
+}
+
+.message{
+    font-size:1.2rem;
+    line-height:1.8;
+    color:var(--text);
+    margin-bottom:30px;
+}
+
+.photo{
+    width:250px;
+    height:250px;
+    border-radius:20px;
+    object-fit:cover;
+    margin-bottom:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:999px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+    font-size:1rem;
+}
+
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:-10px;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(720deg);
+    }
+}
+
+@media(max-width:600px){
+    h1{
+        font-size:2rem;
+    }
+
+    .photo{
+        width:200px;
+        height:200px;
+    }
+}
+</style>
+</head>
+<body>
+
+<script>
+// ===========================
+// EDIT THESE VALUES
+// ===========================
+
+const cardData = {
+    recipientName: "Best Friend",
+    title: "Happy Birthday!",
+    message: `
+    Wishing you an amazing birthday filled with happiness,
+    laughter, unforgettable memories, and lots of cake.
+
+    Thank you for being such a wonderful person.
+    May this year bring you everything you've been hoping for!
+    `,
+    image: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600"
+};
+
+// ===========================
+// END OF EDIT SECTION
+// ===========================
+</script>
+
+<div class="envelope-container" id="envelopeScreen">
+    <div class="envelope" onclick="openCard()">
+        <div class="flap" id="flap"></div>
+    </div>
+
+    <p style="margin-top:20px;">
+        Click the envelope ✉️
+    </p>
+</div>
+
+<div class="card" id="card">
+    <div class="card-content">
+        <img class="photo" id="photo">
+
+        <h1 id="title"></h1>
+
+        <h2 id="name" style="margin-bottom:20px;"></h2>
+
+        <p class="message" id="message"></p>
+
+        <button onclick="launchConfetti()">
+            🎉 Celebrate!
+        </button>
+    </div>
+</div>
+
+<script>
+document.getElementById("title").textContent =
+    cardData.title;
+
+document.getElementById("name").textContent =
+    cardData.recipientName;
+
+document.getElementById("message").textContent =
+    cardData.message;
+
+document.getElementById("photo").src =
+    cardData.image;
+
+function openCard(){
+    document.getElementById("flap").style.transform =
+        "rotateX(180deg)";
+
+    setTimeout(()=>{
+        document.getElementById("envelopeScreen").style.display="none";
+        document.getElementById("card").style.display="flex";
+        launchConfetti();
+    },700);
+}
+
+function launchConfetti(){
+    for(let i=0;i<100;i++){
+        const c=document.createElement("div");
+
+        c.classList.add("confetti");
+
+        c.style.left=Math.random()*100+"vw";
+        c.style.background=
+            `hsl(${Math.random()*360},100%,60%)`;
+
+        c.style.animationDuration=
+            (Math.random()*3+2)+"s";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+            c.remove();
+        },5000);
+    }
+}
+</script>
+
+</body>
+</html>
